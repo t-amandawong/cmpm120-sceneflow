@@ -1,4 +1,5 @@
 var soundon = true;
+var solvedPuzzle = false;
 
 function buttonAnimation(button, buttontext) {
     button.on('pointerover', ()=> {
@@ -104,7 +105,24 @@ class Maze extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0xd9ba4a)
     }
     create() {
-        this
+        this.cameras.main.fadeIn(2000, 51, 38, 40)
+        this.w = this.game.config.width;
+        this.h = this.game.config.height;
+
+        this.foundPuzzle = this.add.rectangle(this.w * 0.5, this.h * 0.5, 500, 100, 0x59669c)
+            .setInteractive().setOrigin(0.5);
+        this.buttonText = this.add.text(this.w * 0.5, this.h * 0.5, "solve a puzzle")
+            .setOrigin(0.5).setFontSize(50);
+        
+        buttonAnimation(this.foundPuzzle, this.buttonText);
+
+        if(solvedPuzzle == false) {
+            this.foundPuzzle.on('pointerdown', ()=> this.scene.start('puzzle'));
+        }
+        else {
+            this.buttonText.setText('done!')
+            this.foundPuzzle.on('pointerdown', ()=> this.scene.start('credits'))
+        }
     }
 }
 
@@ -117,7 +135,19 @@ class Puzzle extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x59669c)
     }
     create() {
+        this.w = this.game.config.width;
+        this.h = this.game.config.height;
 
+        this.solved = this.add.rectangle(this.w * 0.5, this.h * 0.5, 500, 100, 0xd9ba4a)
+            .setInteractive().setOrigin(0.5);
+        this.buttonText = this.add.text(this.w * 0.5, this.h * 0.5, "puzzle solved")
+            .setOrigin(0.5).setFontSize(50);
+        
+        buttonAnimation(this.solved, this.buttonText)
+        this.solved.on('pointerdown', ()=> {
+            solvedPuzzle = true;
+            this.scene.start('maze');
+        })
     }
 }
 
