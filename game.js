@@ -1,19 +1,22 @@
 var soundon = true;
 
+function buttonAnimation(button, buttontext) {
+    button.on('pointerover', ()=> {
+        button.setScale(1.1);
+        buttontext.setScale(1.1);
+    })
+    .on('pointerout', ()=> {
+        button.setScale(1);
+        buttontext.setScale(1);
+    })
+}
+
 class Title extends Phaser.Scene {
     constructor() {
         super('title');
     }
-    buttonAnimation(button, buttontext, nextScene) {
-        button.on('pointerover', ()=> {
-            button.setScale(1.1);
-            buttontext.setScale(1.1);
-        })
-        .on('pointerout', ()=> {
-            button.setScale(1);
-            buttontext.setScale(1);
-        })
-        .on('pointerdown', ()=> {
+    fadeOut(button, nextScene) {
+        button.on('pointerdown', ()=> {
             this.cameras.main.fadeOut(1000, 51, 38, 40);
             this.time.delayedCall(1000, ()=> {
                 this.scene.start(nextScene)
@@ -45,25 +48,18 @@ class Title extends Phaser.Scene {
             .setOrigin(0.5).setFontSize(50);
         
         // button animation on pointerover/pointerout
-        this.buttonAnimation(this.button, this.play, 'maze')
-        this.buttonAnimation(this.button2, this.credits, 'credits')
-        this.buttonAnimation(this.button3, this.settings, 'menu')
+        buttonAnimation(this.button, this.play,)
+        this.fadeOut(this.button, 'maze')
+        buttonAnimation(this.button2, this.credits)
+        this.fadeOut(this.button2, 'credits')
+        buttonAnimation(this.button3, this.settings)
+        this.fadeOut(this.button3, 'menu')
     }
 }
 
 class Menu extends Phaser.Scene {
     constructor() {
         super('menu')
-    }
-    buttonAnimation(button, buttontext) {
-        button.on('pointerover', ()=> {
-            button.setScale(1.1);
-            buttontext.setScale(1.1);
-        })
-        .on('pointerout', ()=> {
-            button.setScale(1);
-            buttontext.setScale(1);
-        })
     }
     preload() {
         this.cameras.main.setBackgroundColor(0xf2e8ac)
@@ -78,7 +74,7 @@ class Menu extends Phaser.Scene {
         this.muteText = this.add.text(this.w/2, this.h * 0.4, "sound is on")
         .setOrigin(0.5).setFontSize(50);
 
-        this.buttonAnimation(this.muteButton, this.muteText)
+        buttonAnimation(this.muteButton, this.muteText)
         this.muteButton.on('pointerdown', ()=> {
             if (soundon == true) {
                 this.muteText.setText('sound is off');
@@ -95,7 +91,7 @@ class Menu extends Phaser.Scene {
         this.backtoTitle = this.add.text(this.w/2, this.h * 0.8, "back to title")
             .setOrigin(0.5).setFontSize(50);
 
-        this.buttonAnimation(this.backButton, this.backtoTitle);
+        buttonAnimation(this.backButton, this.backtoTitle);
         this.backButton.on('pointerdown', ()=> this.scene.start('title'));
     }
 }
@@ -104,29 +100,30 @@ class Maze extends Phaser.Scene {
     constructor() {
         super('maze')
     }
-
+    preload() {
+        this.cameras.main.setBackgroundColor(0xd9ba4a)
+    }
+    create() {
+        this
+    }
 }
 
 class Puzzle extends Phaser.Scene {
     constructor() {
         super('puzzle')
     }
+
+    preload() {
+        this.cameras.main.setBackgroundColor(0x59669c)
+    }
+    create() {
+
+    }
 }
 
 class Credits extends Phaser.Scene {
     constructor() {
         super('credits')
-    }
-    buttonAnimation(button, buttontext, nextScene) {
-        button.on('pointerover', ()=> {
-            button.setScale(1.1);
-            buttontext.setScale(1.1);
-        })
-        .on('pointerout', ()=> {
-            button.setScale(1);
-            buttontext.setScale(1);
-        })
-        .on('pointerdown', ()=> this.scene.start(nextScene));
     }
     preload() {
         this.cameras.main.setBackgroundColor(0x242436)
@@ -147,7 +144,9 @@ class Credits extends Phaser.Scene {
         this.backtoTitle = this.add.text(this.w/2, this.h * 0.8, "back to title")
             .setOrigin(0.5).setFontSize(50);
 
-        this.buttonAnimation(this.backButton, this.backtoTitle, 'title')
+        buttonAnimation(this.backButton, this.backtoTitle);
+        this.backButton.on('pointerdown', ()=> this.scene.start('title'));
+
     }
 }
 
