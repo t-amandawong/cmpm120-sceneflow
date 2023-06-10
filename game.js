@@ -1,3 +1,5 @@
+var soundon = true;
+
 class Title extends Phaser.Scene {
     constructor() {
         super('title');
@@ -49,6 +51,55 @@ class Title extends Phaser.Scene {
     }
 }
 
+class Menu extends Phaser.Scene {
+    constructor() {
+        super('menu')
+    }
+    buttonAnimation(button, buttontext) {
+        button.on('pointerover', ()=> {
+            button.setScale(1.1);
+            buttontext.setScale(1.1);
+        })
+        .on('pointerout', ()=> {
+            button.setScale(1);
+            buttontext.setScale(1);
+        })
+    }
+    preload() {
+        this.cameras.main.setBackgroundColor(0xf2e8ac)
+    }
+    create() {
+        this.cameras.main.fadeIn(2000, 51, 38, 40)
+        this.w = this.game.config.width;
+        this.h = this.game.config.height;
+
+        this.muteButton = this.add.rectangle(this.w/2, this.h * 0.4, 500, 100, 0x59669c)
+        .setInteractive().setOrigin(0.5);
+        this.muteText = this.add.text(this.w/2, this.h * 0.4, "sound is on")
+        .setOrigin(0.5).setFontSize(50);
+
+        this.buttonAnimation(this.muteButton, this.muteText)
+        this.muteButton.on('pointerdown', ()=> {
+            if (soundon == true) {
+                this.muteText.setText('sound is off');
+                soundon = false;
+            }
+            else {
+                this.muteText.setText('sound is on');
+                soundon = true;
+            }
+        })
+
+        this.backButton = this.add.rectangle(this.w/2, this.h * 0.8, 500, 100, 0x59669c)
+            .setInteractive().setOrigin(0.5);
+        this.backtoTitle = this.add.text(this.w/2, this.h * 0.8, "back to title")
+            .setOrigin(0.5).setFontSize(50);
+
+        this.buttonAnimation(this.backButton, this.backtoTitle);
+        this.backButton.on('pointerdown', ()=> this.scene.start('title'));
+    }
+}
+
 class Maze extends Phaser.Scene {
     constructor() {
         super('maze')
@@ -59,12 +110,6 @@ class Maze extends Phaser.Scene {
 class Puzzle extends Phaser.Scene {
     constructor() {
         super('puzzle')
-    }
-}
-
-class Menu extends Phaser.Scene {
-    constructor() {
-        super('menu')
     }
 }
 
