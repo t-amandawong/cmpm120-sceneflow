@@ -11,7 +11,12 @@ class Title extends Phaser.Scene {
             button.setScale(1);
             buttontext.setScale(1);
         })
-        .on('pointerdown', ()=> this.scene.start(nextScene));
+        .on('pointerdown', ()=> {
+            this.cameras.main.fadeOut(1000, 51, 38, 40);
+            this.time.delayedCall(1000, ()=> {
+                this.scene.start(nextScene)
+            })
+            });
     }
     create() {
         this.w = this.game.config.width;
@@ -82,15 +87,19 @@ class Credits extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0x242436)
     }
     create() {
+        this.cameras.main.fadeIn(2000, 51, 38, 40)
+        this.w = this.game.config.width;
+        this.h = this.game.config.height;
+
         this.add.text(this.w/2, this.h/2, 
         ['Production lead: Sirapat \'Poom\' Phunjamaneechot',
         'Technology lead: David Markowitz',
         'Testing lead: Thanyared Wong'], {align: 'left'}
-        ).setFontSize(40).setOrigin(0.5).setFill(0xededf7)
+        ).setFontSize(40).setOrigin(0.5)
 
-        this.backButton = this.add.rectangle(this.w/2, this.h * 0.8, 400, 100, 0xd9ba4a)
+        this.backButton = this.add.rectangle(this.w/2, this.h * 0.8, 500, 100, 0xd9ba4a)
             .setInteractive().setOrigin(0.5);
-        this.backtoTitle = this.add.text(this.w/2, this.h * 0.84, "back to title")
+        this.backtoTitle = this.add.text(this.w/2, this.h * 0.8, "back to title")
             .setOrigin(0.5).setFontSize(50);
 
         this.buttonAnimation(this.backButton, this.backtoTitle, 'title')
