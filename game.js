@@ -1,4 +1,4 @@
-var soundon = true;
+var soundon = true; //no actual sound in this prototype
 var solvedPuzzle = false;
 
 function buttonAnimation(button, buttontext) {
